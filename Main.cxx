@@ -79,19 +79,19 @@ bool CheckAlarm(int delay){
 				
 				switch(repeat[0]){
 					case d;
-						if(difftime( mktime(alarmTime), mktime(currentTime))<difftime(mktime(difftime), mktime(currentTime))&&difftime(mktime(alarmTime), mktime(currentTime)>0){
+						if(difftime( mktime(alarmTime), mktime(currentTime))<difftime(mktime(delayTime), mktime(currentTime))&&difftime(mktime(alarmTime), mktime(currentTime)>0)){
 							return true;
 						}
 					break;
 					case w:
 						if(weekday.find(to_string(currentTime->tm_wday))){
-							if(difftime( mktime(alarmTime), mktime(currentTime))<difftime(mktime(difftime), mktime(currentTime))&&difftime(mktime(alarmTime), mktime(currentTime)>0){
+							if(difftime( mktime(alarmTime), mktime(currentTime))<difftime(mktime(delayTime), mktime(currentTime))&&difftime(mktime(alarmTime), mktime(currentTime)>0)){
 								return true;
-						}
+							}
 						}
 					break;
 					case n;
-						if(difftime(mktime(alarmTime), mktime(currentTime))<difftime(mktime(difftime), mktime(currentTime))&&difftime(mktime(alarmTime), mktime(currentTime)>0){
+						if(difftime( mktime(alarmTime), mktime(currentTime))<difftime(mktime(delayTime), mktime(currentTime))&&difftime(mktime(alarmTime), mktime(currentTime)>0)){
 							return true;
 						}
 					break;
