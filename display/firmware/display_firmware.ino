@@ -6,6 +6,10 @@
  * Author: Duncan Cowan
  */
 
+#include <Wire.h>
+
+#define I2C_ADDRESS 0x22
+
 uint8_t *pixels;
 
 const uint8_t CHARS[10][2][5] = {
@@ -29,14 +33,18 @@ void setup() {
 //    for(int i = 0; i < 24; i++)
 //        pixels[i] = 0xFF;
   
-    DDRD |= B00111100;  // Set pins 4, 5, 6, and 11 as outputs
-    DDRB |= B00111111;  // Set pins 14 to 19 as outputs
+    DDRD |= B00111100;  // Set pins 4, 5, 6, and 11 as outputs.
+    DDRB |= B00111111;  // Set pins 8 to 13 as outputs.
   
     PORTD &= B11000011; // Set pins 4, 5, 6, and 11 low 
-    PORTB |= B00111111; // Set pins 14 to 19 high (turns the PNP transistors off)
+    PORTB |= B00111111; // Set pins 7 to 13 high (which will turn the PNP transistors off)
+
+    // I2c slave device setup
+    Wire.begin(I2C_ADDRESS);
+    Wire.onReceive(receiveEvent);
 
     // For debugging
-//    Serial.begin(9600);
+    Serial.begin(9600);
 
     drawChar('1', 1, 0);
     drawChar('2', 6, 0);
@@ -78,5 +86,14 @@ void loop() {
         PORTB = (PORTB | 0x3f) & ~_BV(j);
         PORTD |= _BV(3); // Latch high
         //delay(2);
+    }
+}
+
+/*
+ * Handles data recevied via the i2c bus.
+ */
+void receiveEvent(int numBytes) {
+    while(Wire.available() > 0) {
+        Serial.println(Wire.read(), BIN);
     }
 }
