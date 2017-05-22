@@ -76,13 +76,13 @@ bool CheckAlarm(int delay){
 					break;
 					case w:
 						if(weekday.find(to_string(currentTime->tm_wday))){
-							if(*currenttime*<alarmTime<*curr+durr*){
+							if(difftime( mktime(alarmTime), mktime(currentTime))>difftime(mktime(difftime), mktime(currentTime))){
 								return true;
-							}
+						}
 						}
 					break;
 					case n;
-						if(*currenttime*<alarmTime<*curr+durr*){
+						if(difftime( mktime(alarmTime), mktime(currentTime))>difftime(mktime(difftime), mktime(currentTime))){
 							return true;
 						}
 					break;
