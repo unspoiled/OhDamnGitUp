@@ -63,9 +63,10 @@
 			?>
 			</select>
 			<select id="val3" name="val3">
-				<option value="Daily">Daily</option>
-				<option value="weekly">weekly</option>
-				<option value="no repeat">no repeat</option>
+				<option value="daily">Daily</option>
+				<option value="weekly">Weekly</option>
+				<option value="no repeat">No repeat</option>
+				<option value="off">Alarm off</option>
 			</select>
 			<select id="val4" name="val4">
 				<option value="1">Monday</option>
