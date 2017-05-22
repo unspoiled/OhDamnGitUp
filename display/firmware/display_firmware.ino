@@ -29,12 +29,11 @@ void setup() {
 //    for(int i = 0; i < 24; i++)
 //        pixels[i] = 0xFF;
   
-    DDRC |= B00001111;  // Set pins 23 to 26 as outputs.
-    DDRB |= B00111111;  // Set pins 8 to 13 as outputs.
-
+    DDRD |= B00111100;  // Set pins 4, 5, 6, and 11 as outputs
+    DDRB |= B00111111;  // Set pins 14 to 19 as outputs
   
-    PORTC &= B11110000; // Set pins 23 to 26 low 
-    PORTB |= B00111111; // Set pins 7 to 13 high (turns the PNP transistors off)
+    PORTD &= B11000011; // Set pins 4, 5, 6, and 11 low 
+    PORTB |= B00111111; // Set pins 14 to 19 high (turns the PNP transistors off)
 
     // For debugging
 //    Serial.begin(9600);
@@ -68,16 +67,16 @@ void loop() {
         first_driver_data = ((pixels[j+6] << 8) | pixels[j]);
         second_driver_data = ((pixels[j+18] << 8) | pixels[j+12]);
     
-        PORTC &= ~_BV(1); // Latch low
+        PORTD &= ~_BV(3); // Latch low
         for(uint8_t i = 0; i < 16; i++) {
-            PORTC &= ~_BV(0);  // Clock low
+            PORTD &= ~_BV(2);  // Clock low
             // TODO: describe these lines
-            PORTC = (PORTC | _BV(2)) & (((first_driver_data >> i) << 2) | ~_BV(2));
-            PORTC = (PORTC | _BV(3)) & (((second_driver_data >> i) << 3) | ~_BV(3));
-            PORTC |= _BV(0);  // Clock high
+            PORTD = (PORTD | _BV(4)) & (((first_driver_data >> i) << 4) | ~_BV(4));
+            PORTD = (PORTD | _BV(5)) & (((second_driver_data >> i) << 5) | ~_BV(5));
+            PORTD |= _BV(2);  // Clock high
         }
         PORTB = (PORTB | 0x3f) & ~_BV(j);
-        PORTC |= _BV(1); // Latch high
-        //delay(3);
+        PORTD |= _BV(3); // Latch high
+        //delay(2);
     }
 }
