@@ -21,25 +21,27 @@ bool CheckAlarm(int delay){
 	ifstream inxml ("/var/www/html/alarm.xml");
 	string line;
 	int i=0;
+	char switcher;
 	string repeat;
 	string weekday;
 	int tone;
-	struct tm * alarmTime;
-	time_t rawtime;
+	struct tm * alarmTime;	
 	struct tm * currentTime;
 	struct tm * delayTime;
+	time_t rawtime;
 	time (&rawtime);
 	currentTime = localtime(&rawtime);
 	delayTime = localtime(&rawtime);
-	mktime(currentTime);
+	alarmTime = localtime(&rawtime);
 	if(delay==3600){
 		delayTime->tm_hour++;
 	}else{
 		delayTime->tm_min+=delay/60;
 		delayTime->tm_sec+=delay%60;
 	}
+	mktime(currentTime);
 	mktime(delayTime);
-	
+	mktime(delayTime);
 	if (inxml.is_open()){
 		inxml.ignore(200,'>');
 		inxml.ignore(200,'>');
@@ -76,26 +78,26 @@ bool CheckAlarm(int delay){
 				inxml.ignore(200,'>');
 				i++;	
 				inxml.ignore(200,'>');
-				
-				switch(repeat[0]){
-					case d;
-						if(difftime( mktime(alarmTime), mktime(currentTime))<difftime(mktime(delayTime), mktime(currentTime))&&difftime(mktime(alarmTime), mktime(currentTime)>0)){
+				switcher=repeat[0];
+				switch(switcher){
+					case 'd':						
+							if(difftime( mktime(alarmTime), mktime(currentTime))<difftime(mktime(delayTime), mktime(currentTime))&&difftime(mktime(alarmTime), mktime(currentTime)>0)){
 							return true;
 						}
 					break;
-					case w:
+					case 'w':
 						if(weekday.find(to_string(currentTime->tm_wday))){
 							if(difftime( mktime(alarmTime), mktime(currentTime))<difftime(mktime(delayTime), mktime(currentTime))&&difftime(mktime(alarmTime), mktime(currentTime)>0)){
 								return true;
 							}
 						}
 					break;
-					case n;
-						if(difftime( mktime(alarmTime), mktime(currentTime))<difftime(mktime(delayTime), mktime(currentTime))&&difftime(mktime(alarmTime), mktime(currentTime)>0)){
+					case 'n':
+							if(difftime( mktime(alarmTime), mktime(currentTime))<difftime(mktime(delayTime), mktime(currentTime))&&difftime(mktime(alarmTime), mktime(currentTime)>0)){
 							return true;
 						}
 					break;
-					case o:
+					case 'o':
 						return false;
 					break;
 					default:
