@@ -44,24 +44,33 @@ bool CheckAlarm(int delay){
 		inxml.ignore(200,'>');
 		inxml.ignore(200,'>');
 		while( getline (inxml,line,'>')){
+			
 			inxml.ignore(200,'>');
 			getline(inxml,line,'<');
-			if(line!="</Alarms"){
+			
+			if(line!="</Alarms"){				
 				
 				alarmTime->tm_hour = stoi(line.substr(0,1),nullptr, 10);
 				alarmTime->tm_min = stoi(line.substr(2,3),nullptr, 10);
+				
 				inxml.ignore(200,'>');
-				inxml.ignore(200,'>');
+				inxml.ignore(200,'>');				
 				getline(inxml,line,'<');
+				
 				repeat=line;
+				
 				inxml.ignore(200,'>');
 				inxml.ignore(200,'>');
 				getline(inxml,line,'<');
+				
 				weekday=line;
+				
 				inxml.ignore(200,'>');
-				inxml.ignore(200,'>');
+				inxml.ignore(200,'>');				
 				getline(inxml,line,'<');
+				
 				tone=stoi(line,nullptr,10);
+				
 				inxml.ignore(200,'>');
 				inxml.ignore(200,'>');
 				inxml.ignore(200,'>');
@@ -70,19 +79,19 @@ bool CheckAlarm(int delay){
 				
 				switch(repeat[0]){
 					case d;
-						if(difftime( mktime(alarmTime), mktime(currentTime))>difftime(mktime(difftime), mktime(currentTime))){
+						if(difftime( mktime(alarmTime), mktime(currentTime))<difftime(mktime(difftime), mktime(currentTime))&&difftime(mktime(alarmTime), mktime(currentTime)>0){
 							return true;
 						}
 					break;
 					case w:
 						if(weekday.find(to_string(currentTime->tm_wday))){
-							if(difftime( mktime(alarmTime), mktime(currentTime))>difftime(mktime(difftime), mktime(currentTime))){
+							if(difftime( mktime(alarmTime), mktime(currentTime))<difftime(mktime(difftime), mktime(currentTime))&&difftime(mktime(alarmTime), mktime(currentTime)>0){
 								return true;
 						}
 						}
 					break;
 					case n;
-						if(difftime( mktime(alarmTime), mktime(currentTime))>difftime(mktime(difftime), mktime(currentTime))){
+						if(difftime(mktime(alarmTime), mktime(currentTime))<difftime(mktime(difftime), mktime(currentTime))&&difftime(mktime(alarmTime), mktime(currentTime)>0){
 							return true;
 						}
 					break;
