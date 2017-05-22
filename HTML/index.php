@@ -68,13 +68,13 @@
 				<option value="no repeat">no repeat</option>
 			</select>
 			<select id="val4" name="val4">
-				<option value="Mon">Monday</option>
-				<option value="Tue">Tuesday</option>
-				<option value="Wed">Wensday</option>
-				<option value="Thu">Thursday</option>
-				<option value="Fri">Friday</option>
-				<option value="Sat">Saturday</option>
-				<option value="Sun">Sunday</option>				
+				<option value="1">Monday</option>
+				<option value="2">Tuesday</option>
+				<option value="3">Wensday</option>
+				<option value="4">Thursday</option>
+				<option value="5">Friday</option>
+				<option value="6">Saturday</option>
+				<option value="0">Sunday</option>				
 			</select>
 		<input type="submit" name="submit" value="Add"></input>
 	</form>	
