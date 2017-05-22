@@ -115,6 +115,14 @@ bool CheckAlarm(int delay){
 }
 
 void alarm(){
+	// This is a quick and dirty way to play an alarm.
+	// NOTE: Make sure your sound is turned up enough.
+	//       To stop the alarm, use "system("pkill loop_sound");"
+	//       or just "pkill loop_sound" in the terminal.
+	string sound = "sounds/beep.wav";
+	string command = "scripts/loop_sound "+sound+" &";
+    
+	system(command.c_str());
 	
 	return;
 }
