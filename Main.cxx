@@ -1,8 +1,8 @@
 /*
- * alarmMain.c++
- *
+ * 	Main.cxx
  *  Created on: 25Apr.,2017
- *      Author: Levi
+ *  Authors: Levi Faid Zac Gardner Duncan Cowie Caleb Mitchell
+ * 	
  */
 
 #include <cstdlib>
@@ -17,130 +17,162 @@
 using namespace std;
 condition_variable ConVar;
 
-bool CheckAlarm(int delay){
+
+
+string CheckAlarm(int delay, bool del){
 	ifstream inxml ("/var/www/html/alarm.xml");
+	ofstream outxml;
 	string line;
-	int i=0;
 	char switcher;
 	string repeat;
 	string weekday;
-	int tone;
 	struct tm * alarmTime;
 	time_t rawtime;
 	time_t localTime;
 	double adiff;
+	bool timeCheck = false;
+	string returnValue;
+	streampos delLocation;
+	
 	time(&rawtime);
 	alarmTime = localtime(&rawtime);
 	localTime = mktime(localtime(&rawtime));
 	mktime(alarmTime);
 	if (inxml.is_open()){
-		inxml.ignore(200,'>');
-		inxml.ignore(200,'>');
-		while( getline (inxml,line,'>')){			
+		inxml.ignore(200,'>');	//ignore xml header
+		inxml.ignore(200,'>');	//ignore alarms start
+		while(inxml.good() && inxml.peek() != EOF){			
+			getline(inxml,line,'>');//get alarm(s) header	
 			inxml.ignore(200,'>');
-			getline(inxml,line,'<');			
-			if(line!="</Alarms"){
+			if(line.find("/Alarms")==line.npos){
+				getline(inxml,line,'<');
 				alarmTime->tm_hour = stoi(line.substr(0,2),nullptr, 10);
 				alarmTime->tm_min = stoi(line.substr(2,2),nullptr, 10);
 				alarmTime->tm_sec = 0;
+				adiff=mktime(alarmTime)-localTime;
+				if((0<adiff)&(adiff<delay)){
+								timeCheck = true;
+				}				
 				inxml.ignore(200,'>');
 				inxml.ignore(200,'>');				
+				if(timeCheck&&del){
+					delLocation = inxml.tellg();
+					cout<<delLocation;
+				}
 				getline(inxml,line,'<');				
-				repeat=line;
+				switcher=line[0];		//repeat type	
 				inxml.ignore(200,'>');
 				inxml.ignore(200,'>');
 				getline(inxml,line,'<');
-				weekday=line;								
+				weekday=line;			//days on				
 				inxml.ignore(200,'>');
 				inxml.ignore(200,'>');				
 				getline(inxml,line,'<');
-				tone=stoi(line,nullptr,10);
+				returnValue=line;		//tone
 				inxml.ignore(200,'>');
 				inxml.ignore(200,'>');
-				inxml.ignore(200,'>');
-				i++;	
-				inxml.ignore(200,'>');
-				switcher=repeat[0];
+				
+				if(!del){
 				switch(switcher){
-					case 'd':		
-							adiff=mktime(alarmTime)-localTime;
-							cout<<adiff<<"\n";							
-							if((0<adiff)&(adiff<delay)){
-								return true;
-						}
+					case 'd':	
+							if(timeCheck){
+							return returnValue+='d';			
+						}			
 					break;
-					case 'w':
-						if(7>weekday.find(to_string(alarmTime->tm_wday))){
-							adiff=mktime(alarmTime)-localTime;
-								cout<<adiff<<"\n";
-								
-							if((0<adiff)&(adiff<delay)){
-								return true;
+					
+					case 'w':						
+						if(weekday.npos!=weekday.find(to_string(alarmTime->tm_wday))){
+							if(timeCheck){
+								return returnValue+'w';
 							}
 						}
 					break;
-					case 'n':
-							adiff=mktime(alarmTime)-localTime;
-							cout<<adiff<<"\n";								
-							if((0<adiff)&(adiff<delay)){
-								return true;
+					
+					case 'n':											
+							if(timeCheck){
+								return returnValue+'n';
 							}
 					break;
-					case 'o':
-						return false;
-					break;
-					default:
-						return false;
 				}
 			}
+			}
 		}		
-		inxml.close();
-		
+		inxml.close();		
 	}
 	else{
-		cout<< "fail";
+		cout<< "XML error: alarm.xml not found\n";
 	}
-	cout<<tone;
+	if(del){
+		inxml.open("/var/www/html/alarm.xml");
+		outxml.open("/var/www/html/alarm");
+		if (outxml.is_open()&&inxml.is_open()){
+			while(inxml.good() && inxml.peek() != EOF){
+				if(inxml.tellg()==delLocation){
+					outxml.put('o');
+					inxml.ignore(1,'n');
+				}else{
+					outxml.put(inxml.get());
+				}
+			}
+			outxml.close();		
+			inxml.close();
+		inxml.open("/var/www/html/alarm");
+		outxml.open("/var/www/html/alarm.xml");
+		if (outxml.is_open()&&inxml.is_open()){
+			while(inxml.good() && inxml.peek() != EOF){
+					outxml.put(inxml.get());
+				}
+			}else{
+				cout<< "XML error:something went wrong, sorry\n";			
+			}
+		}else{
+			cout<< "XML error: alarm.xml not found\n";
+		}
+	}
 	
-	return false;
+	
+	return "0";
 }
 
-void alarm(){
+void alarm(string reptone){
 	// This is a quick and dirty way to play an alarm.
 	// NOTE: Make sure your sound is turned up enough.
 	//       To stop the alarm, use "system("pkill loop_sound");"
 	//       or just "pkill loop_sound" in the terminal.
-	string sound = "sounds/beep.wav";
+	mutex mtx;
+	unique_lock<std::mutex> lockr(mtx);					
+	string sound = "sounds/sound"+reptone.substr(0,1)+".wav";
+	cout<<sound<<"\n";
 	string command = "scripts/loop_sound "+sound+" &";
-    
-	system(command.c_str());
-	
+	system(command.c_str());	
+	if(reptone.find('n')!=reptone.npos){
+		cout<<"ok\n\n";
+		CheckAlarm(15, true);
+	}
+	ConVar.wait_for(lockr, chrono::seconds(60));
+	system("pkill loop_sound");
 	return;
 }
 
-
 void CheckerThread(){
-	int delay = 3600;
+	int delay = 60;
 	mutex mtx;
+	string reptone;
 	unique_lock<std::mutex> lockr(mtx);
-	cout<< "Hello World\n";
 	while(true){
-		if(CheckAlarm(delay)){
+		reptone=CheckAlarm(delay, false);
+		cout<<reptone;
+		if("0"!=reptone){
 			if(delay<15){
-				alarm();
-				delay=3600;
-				
-			ConVar.wait_for(lockr, chrono::seconds(60));
+				alarm(reptone);
+				delay=60;				
 			} else {
 				delay=delay/2;
-				cout<<"True tho\n";
 			}
 		} else {
-			cout<<"false thou\n";
 			ConVar.wait_for(lockr, chrono::seconds(delay));
 		}
 	}
-	cout<<"Goodbye World\n";
 	return;
 }
 
@@ -150,12 +182,9 @@ int main(int argc, char **argv){
 	thread checkT(CheckerThread);
 	while(true){
 		ConVar.wait_for(lockr, chrono::seconds(40));
-		//waitforhtml
-		//makehtml
-		//waitforupdate
-		ConVar.notify_all();
+		//get port to listen on for interupt from the server client
+		//ConVar.notify_all();
 	}
 	checkT.join();
-	cout<< "Hello From The Other Sides\n";
 	return 0;
 }
