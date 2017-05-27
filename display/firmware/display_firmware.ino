@@ -33,10 +33,10 @@ void setup() {
 //    for(int i = 0; i < 24; i++)
 //        pixels[i] = 0xFF;
   
-    DDRD |= B00111100;  // Set pins 4, 5, 6, and 11 as outputs.
+    DDRD |= B01111100;  // Set pins 4, 5, 6, 11 and 12 as outputs.
     DDRB |= B00111111;  // Set pins 8 to 13 as outputs.
   
-    PORTD &= B11000011; // Set pins 4, 5, 6, and 11 low 
+    PORTD &= B10000011; // Set pins 4, 5, 6, 11, and 12 low
     PORTB |= B00111111; // Set pins 7 to 13 high (which will turn the PNP transistors off)
 
     // I2c slave device setup
@@ -83,8 +83,11 @@ void loop() {
             PORTD = (PORTD | _BV(5)) & (((second_driver_data >> i) << 5) | ~_BV(5));
             PORTD |= _BV(2);  // Clock high
         }
+        PORTD |= _BV(6); // Disable leds before we transition to the next row, 
+                         // stops random leds from flickering.
         PORTB = (PORTB | 0x3f) & ~_BV(j);
         PORTD |= _BV(3); // Latch high
+        PORTD &= ~_BV(6); // Enable leds after we have fully transitioned.
         //delay(2);
     }
 }
