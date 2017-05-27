@@ -1,4 +1,4 @@
 <?xml version="1.0"?>
 <Alarms>
 	
-	<Alarm><Time>0100</Time><Repeat>Daily</Repeat><weekday>monday</weekday><Tone>1</Tone></Alarm></Alarms>
+	<Alarm><Time>1620</Time><Repeat>n</Repeat><weekday>monday</weekday><Tone>1</Tone></Alarm></Alarms>
