@@ -31,8 +31,6 @@ ifneq ($(strip $(CPP_DEPS)),)
 endif
 endif
 
--include ../makefile.defs
-
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
@@ -41,7 +39,7 @@ all: GitUp
 # Tool invocations
 GitUp: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
-	@echo 'Invoking: Cross G++ Linker'
+	@echo 'Invoking: G++ Linker'
 	g++  -o "GitUp" $(OBJS) $(USER_OBJS) $(LIBS) -pthread
 	@echo 'Finished building target: $@'
 	@echo ' '
