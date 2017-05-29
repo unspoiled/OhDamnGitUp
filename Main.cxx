@@ -13,6 +13,7 @@
 #include <thread>
 #include <fstream>
 #include <string>
+#include "ClockDisplay.h"
 
 using namespace std;
 condition_variable ConVar;
@@ -178,11 +179,13 @@ int main(int argc, char **argv){
 	mutex mtx;
 	unique_lock<std::mutex> lockr(mtx);
 	thread checkT(CheckerThread);
+	ClockDisplay cd;
 	while(true){
 		ConVar.wait_for(lockr, chrono::seconds(40));
 		//get port to listen on for interupt from the server client
 		//ConVar.notify_all();
 	}
 	checkT.join();
+	cd.join();
 	return 0;
 }
