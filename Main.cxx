@@ -142,11 +142,9 @@ void alarm(string reptone){
 	mutex mtx;
 	unique_lock<std::mutex> lockr(mtx);					
 	string sound = "sounds/sound"+reptone.substr(0,1)+".wav";
-	cout<<sound<<"\n";
 	string command = "scripts/loop_sound "+sound+" &";
 	system(command.c_str());	
 	if(reptone.find('n')!=reptone.npos){
-		cout<<"ok\n\n";
 		CheckAlarm(15, true);
 	}
 	ConVar.wait_for(lockr, chrono::seconds(60));
