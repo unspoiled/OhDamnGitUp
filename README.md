@@ -5,7 +5,7 @@ In a world saturated by devices with the "Jack of all trades, master of none" me
 
 
 
-### Under The Hood
+## Under The Hood
 
 There are 3 main parts to our service; 
 - The software that checks for alarms and makes noise
