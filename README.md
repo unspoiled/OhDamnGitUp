@@ -40,7 +40,7 @@ and trys to connect to the internet, if it fails to connect with the supplied in
 connection is successful it can be accessed on the connbected wifi point through the same domain name "gitup.local" note that this will
 only work on devices that support bonjour mdns dection which includes apples products, other wise the needed ip address to connect to by
 typing it into the url bar will display on the clocks screen. once the site has been accessed alarms can be set from here 
-for weekly repeats one off alarms or daily alarms. alarms are currently set in 24 hour time.
+for weekly repeats one off alarms or daily alarms. alarms are currently set in 24 hour time. For testing a demonstartion purposes, the alarms can be set when ot connected to the internet by manually navigating to the index3.php file in a web browser, and internet connection supports wpa-psk encryption at this point.
 
 #### Chapter three, The Hardware
 
