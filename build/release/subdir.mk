@@ -7,17 +7,17 @@ CXX_SRCS += \
 ../../Main.cxx 
 
 CPP_SRCS += \
-../../ClockDisplay.cpp 
+../../TimeDisplay.cpp 
 
 OBJS += \
-./ClockDisplay.o \
+./TimeDisplay.o \
 ./Main.o 
 
 CXX_DEPS += \
 ./Main.d 
 
 CPP_DEPS += \
-./ClockDisplay.d 
+./TimeDisplay.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
