@@ -4,7 +4,7 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
-../../../display/lcd.c 
+../../../display/lcd.cpp 
 
 OBJS += \
 ./display/lcd.o 
